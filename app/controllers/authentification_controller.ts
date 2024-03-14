@@ -23,4 +23,13 @@ export default class AuthentificationController {
       ...user.serialize(),
     })
   }
+
+  async me({ auth, response }: HttpContext) {
+    try {
+      const user = auth.getUserOrFail()
+      return response.ok(user)
+    } catch (error) {
+      return response.unauthorized({ error: 'User not found' })
+    }
+  }
 }
