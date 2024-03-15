@@ -2,8 +2,13 @@ import { DateTime } from 'luxon'
 import { withAuthFinder } from '@adonisjs/auth'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import Invoice from '#models/invoice'
+import Property from '#models/property'
+import ProviderService from '#models/provider_service'
+import Society from '#models/society'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -23,8 +28,26 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare email: string
 
+  @column()
+  declare phoneNumber: string | null;
+
   @column({ serializeAs: null })
   declare password: string
+
+  @column()
+  declare isActive: boolean;
+
+  @belongsTo(() => Society)
+  declare society: BelongsTo<typeof Society>;
+
+  @hasMany(() => Property)
+  declare property: HasMany<typeof Property>;
+
+  @hasMany(() => ProviderService)
+  declare providerServices: HasMany<typeof ProviderService>;
+
+  @hasMany(() => Invoice)
+  declare invoices: HasMany<typeof Invoice>;
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime
@@ -32,7 +55,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null})
   declare updatedAt: DateTime | null
 
-  
   static accessTokens = DbAccessTokensProvider.forModel(User, {
     expiresIn: '10m',
     prefix: 'oat_',
