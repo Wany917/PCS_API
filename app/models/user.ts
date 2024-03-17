@@ -9,6 +9,8 @@ import Invoice from '#models/invoice'
 import Property from '#models/property'
 import ProviderService from '#models/provider_service'
 import Society from '#models/society'
+import Review from '#models/review'
+import Message from '#models/message'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -29,25 +31,31 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare email: string
 
   @column()
-  declare phoneNumber: string | null;
+  declare phoneNumber: string | null
 
   @column({ serializeAs: null })
   declare password: string
 
   @column()
-  declare isActive: boolean;
+  declare isActive: boolean
 
   @belongsTo(() => Society)
-  declare society: BelongsTo<typeof Society>;
+  declare society: BelongsTo<typeof Society>
 
   @hasMany(() => Property)
-  declare property: HasMany<typeof Property>;
+  declare property: HasMany<typeof Property>
 
   @hasMany(() => ProviderService)
-  declare providerServices: HasMany<typeof ProviderService>;
+  declare providerServices: HasMany<typeof ProviderService>
 
   @hasMany(() => Invoice)
-  declare invoices: HasMany<typeof Invoice>;
+  declare invoices: HasMany<typeof Invoice>
+
+  @hasMany(() => Review)
+  declare reviews: HasMany<typeof Review>
+
+  @hasMany(() => Message)
+  declare messages: HasMany<typeof Message>
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime
