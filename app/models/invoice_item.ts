@@ -5,6 +5,18 @@ export default class InvoiceItem extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column()
+  declare invoice_id: number
+
+  @column()
+  declare description: string
+
+  @column()
+  declare quantity: number
+
+  @column()
+  declare price: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
