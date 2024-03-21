@@ -74,4 +74,60 @@ export default class InvoicesController {
             return response.status(500).send({ error: 'Internal server error' })
         }
     }
+    async pay({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Invoice paid successfully' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async send({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Invoice sent successfully' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async sendReminder({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Payment reminder sent successfully' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async generatePDF({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'PDF generated successfully' })
+        } catch (error){
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async import({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Invoices imported successfully' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async export({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Invoices exported successfully' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async search({response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Invoices search results' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
+    async stats({ response }: HttpContext) {
+        try {
+            return response.ok({ message: 'Invoice statistics' })
+        } catch (error) {
+            return response.status(500).send({ error: 'Internal server error' })
+        }
+    }
 }

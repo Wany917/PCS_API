@@ -42,6 +42,12 @@ router.group(() => {
   router.put('invoices/:id', [InvoicesController, 'update'])
   router.delete('invoices/:id', [InvoicesController, 'destroy'])
 }).prefix('invoices').use(middleware.auth())
+router.group(() =>{
+  router.post('invoices/import', [InvoicesController, 'import'])
+  router.get('invoices/export', [InvoicesController, 'export'])
+  router.post('invoices/search', [InvoicesController, 'search'])
+  router.get('invoices/stats', [InvoicesController, 'stats'])
+}).prefix('invoices').use(middleware.auth())
 
 router.group(() => {
   router.get('invoice-items', [InvoiceItemsController, 'index'])
