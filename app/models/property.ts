@@ -31,10 +31,7 @@ export default class Property extends BaseModel {
   declare description: string;
 
   @column()
-  declare unitCost: number | null;
-
-  @column()
-  declare hourCost: number | null;
+  declare dayCost: number;
 
   @column()
   declare isPublic: boolean;

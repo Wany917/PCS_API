@@ -16,10 +16,7 @@ export default class ProviderService extends BaseModel {
   declare description: string;
 
   @column()
-  declare unitCost: number | null;
-
-  @column()
-  declare hourCost: number | null;
+  declare price: number;
 
   @hasMany(() => ProviderPlanning)
   declare providerPlanning: HasMany<typeof ProviderPlanning>;
