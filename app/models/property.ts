@@ -37,7 +37,7 @@ export default class Property extends BaseModel {
   declare hourCost: number | null;
 
   @column()
-  declare isdeclare: boolean;
+  declare isPublic: boolean;
 
   @hasMany(() => PropertyImage)
   declare propertyImage: HasMany<typeof PropertyImage>;

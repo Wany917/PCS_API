@@ -13,7 +13,7 @@ export default class Review extends BaseModel {
   declare rating: number;
 
   @column()
-  declare comment: string;
+  declare comment: string | null;
 
   @column()
   declare userId: number;

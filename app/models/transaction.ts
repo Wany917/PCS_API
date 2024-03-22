@@ -12,12 +12,6 @@ export default class Transaction extends BaseModel {
   @column()
   declare amount: number;
 
-  @column.dateTime()
-  declare dueDate: DateTime;
-
-  @column.dateTime()
-  declare paidAt: DateTime;
-
   @column()
   declare userId: number;
 

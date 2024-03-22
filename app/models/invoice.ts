@@ -15,6 +15,12 @@ export default class Invoice extends BaseModel {
   @column()
   declare description: string;
 
+  @column.dateTime()
+  declare dueDate: DateTime;
+
+  @column.dateTime()
+  declare paidAt: DateTime;
+
   @hasMany(() => InvoiceItem)
   declare items: HasMany<typeof InvoiceItem>;
 

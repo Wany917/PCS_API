@@ -9,8 +9,10 @@ export default class extends BaseSchema {
       table.string('firstname').notNullable()
       table.string('lastname').notNullable()
       table.string('email', 254).notNullable().unique()
+      table.string('phoneNumber').nullable()
       table.string('password').notNullable()
-
+      table.boolean('isActive')
+      table.integer('society_id').unsigned().references('societies.id')
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })
