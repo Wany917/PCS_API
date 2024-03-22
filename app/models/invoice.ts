@@ -12,9 +12,6 @@ export default class Invoice extends BaseModel {
   @column()
   declare amount: number;
 
-  @column()
-  declare description: string;
-
   @column.dateTime()
   declare dueDate: DateTime;
 

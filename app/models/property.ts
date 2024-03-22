@@ -28,10 +28,16 @@ export default class Property extends BaseModel {
   declare squareMetersNumber: number;
 
   @column()
+  declare roomNumber: number;
+
+  @column()
   declare description: string;
 
   @column()
-  declare dayCost: number;
+  declare dayCost: number | null;
+
+  @column()
+  declare monthlyCost: number | null;
 
   @column()
   declare isPublic: boolean;

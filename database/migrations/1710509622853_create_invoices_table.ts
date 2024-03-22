@@ -7,7 +7,6 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
       table.float('amount').notNullable()
-      table.string('description').notNullable()
       table.integer('user_id').unsigned().references('users.id').nullable()
       table.integer('society_id').unsigned().references('societies.id').nullable()
       table.integer('issuer_user_id').unsigned().references('users.id').nullable()
