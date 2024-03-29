@@ -22,7 +22,10 @@ export default class PropertiesController {
     const property = await Property.findOrFail(params.id)
     const propertyImages = await property.related('propertyImages').query()
 
-    return { ...property, propertyImages: propertyImages }
+    return {
+      property: property,
+      propertyImages: propertyImages
+    }
   }
   async store({ request, response, bouncer, auth }: HttpContext) {
     const payload = await request.validateUsing(createPropertyValidator)
