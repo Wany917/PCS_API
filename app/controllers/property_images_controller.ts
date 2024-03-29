@@ -12,8 +12,8 @@ export default class PropertyImagesController {
     if (await bouncer.with(PropertyImagePolicy).denies('create', property)) {
       return response.forbidden('Cannot add property image.')
     }
-    
-    return PropertyImage.create({...payload, propertyId: property.id})
+
+    return PropertyImage.create({ ...payload, propertyId: property.id })
   }
 
   async destroy({ params, response, bouncer }: HttpContext) {
