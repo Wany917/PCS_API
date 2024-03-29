@@ -39,6 +39,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare isActive: boolean
 
+  @column()
+  declare isAdmin: boolean
+
   @belongsTo(() => Society)
   declare society: BelongsTo<typeof Society>
 
@@ -64,7 +67,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {
-    expiresIn: '10m',
+    expiresIn: '10h',
     prefix: 'oat_',
     table: 'auth_access_tokens',
     type: 'auth_token',

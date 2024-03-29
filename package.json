@@ -1,6 +1,6 @@
 {
-  "name": "projet_annuels",
-  "version": "0.0.0",
+  "name": "projet_annuel",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -16,6 +16,7 @@
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
+    "#enums/*": "./app/enums/*.js",
     "#models/*": "./app/models/*.js",
     "#mails/*": "./app/mails/*.js",
     "#services/*": "./app/services/*.js",
@@ -51,10 +52,13 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^9.1.1",
+    "@adonisjs/bouncer": "^3.1.1",
     "@adonisjs/core": "^6.2.2",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^20.1.0",
     "@vinejs/vine": "^1.7.1",
+    "adonis-autoswagger": "^3.4.1",
+    "adonis-lucid-filter": "^5.1.0",
     "luxon": "^3.4.4",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1"

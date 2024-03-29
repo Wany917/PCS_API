@@ -1,90 +1,70 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Property from '#models/property'
+import { createPropertyValidator, updatePropertyValidator } from '#validators/property_validator'
+import PropertyPolicy from '#policies/property_policy'
 
 export default class PropertiesController {
-    async index({ response }: HttpContext) {
-        try {
-            const properties = await Property.query()
-                .preload('propertyImage')
-                .preload('ownerPlanning')
-                .preload('providerPlanning')
-                .with('user', (query) => {})
-                .with('society', (query) => {})
-            return response.ok(properties)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+  async index({ request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(PropertyPolicy).denies('view')) {
+      return response.forbidden('Cannot view properties list.')
     }
 
-    async show({ params, response }: HttpContext) {
-        try {
-            const property = await Property.query()
-                .preload('propertyImage')
-                .preload('ownerPlanning')
-                .preload('providerPlanning')
-                .with('user', (query) => {})
-                .with('society', (query) => {})
-                .where('id', params.id)
-                .first()
+    const page = request.input('page', 1)
+    const limit = request.input('limit', 10)
+    return Property.query().preload('propertyImages').paginate(page, limit)
+  }
 
-            if (!property) {
-                return response.notFound({ error: 'Property not found' })
-            }
-
-            return response.ok(property)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+  async show({ params, response, bouncer }: HttpContext) {
+    if (await bouncer.with(PropertyPolicy).denies('view')) {
+      return response.forbidden('Cannot view property.')
     }
 
-    async store({ request, response }: HttpContext) {
-        try {
-            const data = request.only([
-                'type', 'name', 'address', 'country', 'squareMetersNumber', 
-                'description', 'unitCost', 'hourCost', 'isdeclare', 'userId', 'societyId'
-            ])
-            const property = await Property.create(data)
+    const property = await Property.findOrFail(params.id)
+    const propertyImages = await property.related('propertyImages').query()
+    
+    return {
+      property: property,
+      propertyImages: propertyImages
+    }
+  }
+  async store({ request, response, bouncer, auth }: HttpContext) {
+    const payload = await request.validateUsing(createPropertyValidator)
 
-            await property.load('propertyImage');
-            await property.load('ownerPlanning');
-            await property.load('providerPlanning');
-            await property.load('user');
-            await property.load('society');
-
-            return response.created(property)
-        } catch (error) {
-            return response.status(400).send({ error: 'Invalid data provided' })
-        }
+    if (await bouncer.with(PropertyPolicy).denies('create', payload.userId, payload.societyId)) {
+      return response.forbidden('Cannot add property.')
     }
 
-    async update({ params, request, response }: HttpContext) {
-        try {
-            const property = await Property.find(params.id)
-            if (!property) {
-                return response.notFound({ error: 'Property not found' })
-            }
-            const data = request.only([
-                'type', 'name', 'address', 'country', 'squareMetersNumber', 
-                'description', 'unitCost', 'hourCost', 'isdeclare', 'userId', 'societyId'
-            ])
-            property.merge(data)
-            await property.save()
-            return response.ok(property)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+    if (payload.userId === undefined) payload.userId = auth.user?.id
+    if (payload.societyId === undefined) payload.societyId = auth.user?.society?.id
+    if (payload.societyId !== undefined) payload.userId = undefined
+    return Property.create(payload)
+  }
+
+  async update({ params, request, response, bouncer }: HttpContext) {
+    const property = await Property.findOrFail(params.id)
+    const payload = await request.validateUsing(updatePropertyValidator)
+
+    if (
+      await bouncer
+        .with(PropertyPolicy)
+        .denies('update', payload.userId, payload.societyId, property)
+    ) {
+      return response.forbidden('Cannot update property.')
     }
 
-    async destroy({ params, response }: HttpContext) {
-        try {
-            const property = await Property.find(params.id)
-            if (!property) {
-                return response.notFound({ error: 'Property not found' })
-            }
-            await property.delete()
-            return response.noContent()
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+    property.merge(payload)
+    await property.save()
+    return property
+  }
+
+  async destroy({ params, response, bouncer }: HttpContext) {
+    const property = await Property.findOrFail(params.id)
+
+    if (await bouncer.with(PropertyPolicy).denies('destroy', property)) {
+      return response.forbidden('Cannot delete property.')
     }
+
+    await property.delete()
+    return { message: 'Property deleted successfully' }
+  }
 }

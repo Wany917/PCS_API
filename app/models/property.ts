@@ -6,7 +6,7 @@ import PropertyImage from '#models/property_image';
 import OwnerPlanning from '#models/owner_planning';
 import ProviderPlanning from '#models/provider_planning';
 import Society from '#models/society';
-import { PropertyType } from '../enums/propertyType.js';
+import { PropertyType } from '#enums/property_type';
 
 export default class Property extends BaseModel {
   @column({ isPrimary: true })
@@ -43,7 +43,7 @@ export default class Property extends BaseModel {
   declare isPublic: boolean;
 
   @hasMany(() => PropertyImage)
-  declare propertyImage: HasMany<typeof PropertyImage>;
+  declare propertyImages: HasMany<typeof PropertyImage>;
 
   @hasMany(() => OwnerPlanning)
   declare ownerPlanning: HasMany<typeof OwnerPlanning>;
@@ -61,7 +61,7 @@ export default class Property extends BaseModel {
   declare societyId: number;
 
   @belongsTo(() => Society)
-  declare society: BelongsTo<typeof Society>;
+  declare society: BelongsTo<typeof Society>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

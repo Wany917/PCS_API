@@ -1,10 +1,10 @@
 import User from '#models/user'
-import { registerValidator, loginValidator } from '#validators/authentification'
+import { registerValidator, loginValidator } from '#validators/authentication'
 import { HttpContext } from '@adonisjs/core/http'
 
-export default class AuthentificationController {
+export default class AuthenticationController {
   
-  async register({ request, response }: HttpContext) {
+  static async register({ request, response }: HttpContext) {
     try {
       const payload = await request.validateUsing(registerValidator)
       const user = await User.create(payload)
@@ -14,7 +14,7 @@ export default class AuthentificationController {
     }
   }
 
-  async login({ request, response }: HttpContext) {
+  static async login({ request, response }: HttpContext) {
     try {
       const { email, password } = await request.validateUsing(loginValidator)
       const user = await User.verifyCredentials(email, password)
@@ -28,7 +28,7 @@ export default class AuthentificationController {
     }
   }
 
-  async me({ auth, response }: HttpContext) {
+  static async me({ auth, response }: HttpContext) {
     try {
       const user = await auth.authenticate()
       return response.ok(user)
