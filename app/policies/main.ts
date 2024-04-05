@@ -13,6 +13,8 @@
 */
 
 export const policies = {
+  UserPolicy: () => import('#policies/user_policy'),
+  SocietyPolicy: () => import('#policies/society_policy'),
   PropertyImagePolicy: () => import('#policies/property_image_policy'),
   PropertyPolicy: () => import('#policies/property_policy')
 }

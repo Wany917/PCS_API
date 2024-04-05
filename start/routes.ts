@@ -10,23 +10,14 @@
 import AuthenticationController from '#controllers/authentication_controller'
 import PropertiesController from '#controllers/properties_controller'
 
-import AutoSwagger from 'adonis-autoswagger'
-import swagger from '#config/swagger'
-
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 import PropertyImagesController from '#controllers/property_images_controller'
+import SocietiesController from '#controllers/societies_controller'
+import UsersController from '#controllers/users_controller'
 
 router.get('/', async () => {
-  return 'hello world ;)'
-})
-
-router.get('/swagger', async () => {
-  return AutoSwagger.default.json(router.toJSON(), swagger)
-})
-
-router.get('/docs', async () => {
-  return AutoSwagger.default.ui('/swagger', swagger)
+  return 'Bienvenue sur notre projet annuel.'
 })
 
 router
@@ -36,6 +27,16 @@ router
     router.get('me', AuthenticationController.me).use(middleware.auth())
   })
   .prefix('auth')
+
+router
+  .resource('users', UsersController)
+  .apiOnly()
+  .use(['index', 'store', 'update', 'destroy'], middleware.auth())
+
+router
+  .resource('societies', SocietiesController)
+  .apiOnly()
+  .use(['index', 'store', 'update', 'destroy'], middleware.auth())
 
 router
   .resource('properties', PropertiesController)

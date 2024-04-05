@@ -1,76 +1,71 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Society from '#models/society'
+import SocietyPolicy from '#policies/society_policy'
+import { createSocietyValidator, updateSocietyValidator } from '#validators/society_validator'
+import User from '#models/user'
 
 export default class SocietiesController {
-    async index({ response }: HttpContext) {
-        try {
-            const societies = await Society.query()
-                .with('user', (query) => {})
-                .with('property', (query) => {})
-                .with('providerServices', (query) => {})
-            return response.ok(societies)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+  async index({ request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(SocietyPolicy).denies('viewList')) {
+      return response.forbidden('Cannot view societies list.')
     }
 
-    async show({ params, response }: HttpContext) {
-        try {
-            const society = await Society.query()
-                .with('user', (query) => {})
-                .with('property', (query) => {})
-                .with('providerServices', (query) => {})
-                .where('id', params.id)
-                .first()
+    const page = request.input('page', 1)
+    const limit = request.input('limit', 10)
+    return Society.query().paginate(page, limit)
+  }
 
-            if (!society) {
-                return response.notFound({ error: 'Society not found' })
-            }
+  async store({ request, response, bouncer, auth }: HttpContext) {
+    const payload = await request.validateUsing(createSocietyValidator)
 
-            return response.ok(society)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+    if (await bouncer.with(SocietyPolicy).denies('create', payload.userId)) {
+      return response.forbidden('Cannot add society.')
     }
 
-    async store({ request, response }: HttpContext) {
-        try {
-            const data = request.only(['name', 'siren', 'address', 'userId', 'propertyId'])
-            const society = await Society.create(data)
-            await society.load('user')
-            await society.load('property')
-            await society.load('providerServices')
-            return response.created(society)
-        } catch (error) {
-            return response.status(400).send({ error: 'Invalid data provided' })
-        }
+    if (payload.userId === undefined) payload.userId = auth.getUserOrFail().id
+
+    const society = await Society.create(payload)
+    const user = await User.findByOrFail('id', payload.userId)
+
+    user.societyId = society.id
+    user.save()
+
+    return 'society created';
+  }
+
+  async show({ params, response, bouncer }: HttpContext) {
+    if (await bouncer.with(SocietyPolicy).denies('view')) {
+      return response.forbidden('Cannot view society.')
     }
 
-    async update({ params, request, response }: HttpContext) {
-        try {
-            const society = await Society.find(params.id)
-            if (!society) {
-                return response.notFound({ error: 'Society not found' })
-            }
-            const data = request.only(['name', 'siren', 'address', 'userId', 'propertyId'])
-            society.merge(data)
-            await society.save()
-            return response.ok(society)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+    return Society.findOrFail(params.id)
+  }
+
+  async update({ params, request, response, bouncer }: HttpContext) {
+    const society = await Society.findOrFail(params.id)
+    const payload = await request.validateUsing(updateSocietyValidator)
+
+    if (
+      await bouncer
+        .with(SocietyPolicy)
+        .denies('update')
+    ) {
+      return response.forbidden('Cannot update property.')
     }
 
-    async destroy({ params, response }: HttpContext) {
-        try {
-            const society = await Society.find(params.id)
-            if (!society) {
-                return response.notFound({ error: 'Society not found' })
-            }
-            await society.delete()
-            return response.noContent()
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+    society.merge(payload)
+    await society.save()
+    return { message: 'Society update successfully' }
+  }
+
+  async destroy({ params, response, bouncer }: HttpContext) {
+    const property = await Society.findOrFail(params.id)
+
+    if (await bouncer.with(SocietyPolicy).denies('delete')) {
+      return response.forbidden('Cannot delete property.')
     }
+
+    await property.delete()
+    return { message: 'Property deleted successfully' }
+  }
 }

@@ -8,7 +8,7 @@ export default class PropertyImagePolicy extends BasePolicy {
     /**
      * Always allow an admin user without performing any check
      */
-    if (user && user?.$extras.isAdmin) {
+    if (user && user.isAdmin) {
       return true
     }
   }

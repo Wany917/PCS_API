@@ -8,7 +8,7 @@ export default class PropertyPolicy extends BasePolicy {
     /**
      * Always allow an admin user without performing any check
      */
-    if (user && user?.$extras.isAdmin) {
+    if (user && user.isAdmin) {
       return true
     }
   }
@@ -54,7 +54,7 @@ export default class PropertyPolicy extends BasePolicy {
   /**
    * Only the owner can delete the property
    */
-  destroy(user: User, property: Property): AuthorizerResponse {
+  delete(user: User, property: Property): AuthorizerResponse {
     return user.id === property?.userId || user?.society?.id === property?.societyId
   }
 }

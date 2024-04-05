@@ -1,19 +1,30 @@
-import path from "node:path";
-import url from "node:url";
+import { SwaggerConfig } from "adonisjs-6-swagger";
 
 export default {
-  path: path.dirname(url.fileURLToPath(import.meta.url)) + '/../', // for AdonisJS v6
-  title: "Projet Annuel",
-  version: "0.0.1",
-  tagIndex: 1,
-  snakeCase: false,
-  debug: false, // set to true, to get some useful debug output
-  ignore: ["/swagger", "/docs"],
-  preferredPutPatch: "PUT", // if PUT/PATCH are provided for the same route, prefer PUT
-  common: {
-    parameters: {}, // OpenAPI conform parameters that are commonly used
-    headers: {}, // OpenAPI conform headers that are commonly used
-  },
-  persistAuthorization: true, // persist authorization between reloads on the swagger page
-  showFullPath: false, // the path displayed after endpoint summary
-};
+	uiEnabled: true, //disable or enable swaggerUi route
+	uiUrl: 'docs', // url path to swaggerUI
+	specEnabled: true, //disable or enable swagger.json route
+	specUrl: '/swagger.json',
+
+	middleware: [], // middlewares array, for protect your swagger docs and spec endpoints
+
+	options: {
+		definition: {
+			openapi: '3.0.0',
+			info: {
+				title: 'projet_annuel',
+				version: '0.0.1',
+				description: 'API pour le projet annuel de 2ème année.'
+			}
+		},
+
+		apis: [
+			'app/**/*.ts',
+			'docs/swagger/**/*.yml',
+			'start/routes.ts'
+		],
+		basePath: '/'
+	},
+	mode: process.env.NODE_ENV === 'production' ? 'PRODUCTION' : 'RUNTIME',
+  specFilePath: 'docs/swagger.json'
+} as SwaggerConfig

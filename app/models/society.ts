@@ -13,7 +13,7 @@ export default class Society extends BaseModel {
   declare name: string;
 
   @column()
-  declare siren: string;
+  declare siren: number;
 
   @hasMany(() => User)
   declare user: HasMany<typeof User>;

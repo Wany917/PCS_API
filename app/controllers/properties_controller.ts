@@ -14,19 +14,6 @@ export default class PropertiesController {
     return Property.query().preload('propertyImages').paginate(page, limit)
   }
 
-  async show({ params, response, bouncer }: HttpContext) {
-    if (await bouncer.with(PropertyPolicy).denies('view')) {
-      return response.forbidden('Cannot view property.')
-    }
-
-    const property = await Property.findOrFail(params.id)
-    const propertyImages = await property.related('propertyImages').query()
-
-    return {
-      property: property,
-      propertyImages: propertyImages
-    }
-  }
   async store({ request, response, bouncer, auth }: HttpContext) {
     const payload = await request.validateUsing(createPropertyValidator)
 
@@ -38,6 +25,17 @@ export default class PropertiesController {
     if (payload.societyId === undefined) payload.societyId = auth.user?.society?.id
     if (payload.societyId !== undefined) payload.userId = undefined
     return Property.create(payload)
+  }
+
+  async show({ params, response, bouncer }: HttpContext) {
+    if (await bouncer.with(PropertyPolicy).denies('view')) {
+      return response.forbidden('Cannot view property.')
+    }
+
+    const property = await Property.findOrFail(params.id)
+    await property.load('propertyImages')
+
+    return property
   }
 
   async update({ params, request, response, bouncer }: HttpContext) {
@@ -54,13 +52,13 @@ export default class PropertiesController {
 
     property.merge(payload)
     await property.save()
-    return property
+    return { message: 'Property updated successfully' }
   }
 
   async destroy({ params, response, bouncer }: HttpContext) {
     const property = await Property.findOrFail(params.id)
 
-    if (await bouncer.with(PropertyPolicy).denies('destroy', property)) {
+    if (await bouncer.with(PropertyPolicy).denies('delete', property)) {
       return response.forbidden('Cannot delete property.')
     }
 
