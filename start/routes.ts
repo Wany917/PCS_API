@@ -8,16 +8,28 @@
 */
 
 import AuthenticationController from '#controllers/authentication_controller'
-import PropertiesController from '#controllers/properties_controller'
+const PropertiesController = () => import ('#controllers/properties_controller')
+const PropertyImagesController = () => import ('#controllers/property_images_controller')
+const SocietiesController = () => import ('#controllers/societies_controller')
+const UsersController = () => import ('#controllers/users_controller')
+
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import PropertyImagesController from '#controllers/property_images_controller'
-import SocietiesController from '#controllers/societies_controller'
-import UsersController from '#controllers/users_controller'
+
+import AutoSwagger from "adonis-autoswagger";
+import swagger from "#config/swagger";
 
 router.get('/', async () => {
   return 'Bienvenue sur notre projet annuel.'
+})
+
+router.get("/swagger", async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger);
+})
+
+router.get("/docs", async () => {
+  return AutoSwagger.default.ui("/swagger", swagger);
 })
 
 router

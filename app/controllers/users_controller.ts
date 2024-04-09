@@ -58,5 +58,5 @@ export default class UsersController {
     
         await user.delete()
         return { message: 'user deleted successfully' }
-    }
+  }
 }

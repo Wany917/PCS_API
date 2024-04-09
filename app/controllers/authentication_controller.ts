@@ -21,7 +21,6 @@ export default class AuthenticationController {
       const token = await User.accessTokens.create(user)
       return response.ok({
         token: token.value!.release(),
-        ...user.serialize(),
       })
     } catch (error) {
       return response.status(401).send({ error: 'Login failed', details: error.messages })
