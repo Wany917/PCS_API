@@ -12,10 +12,13 @@ const PropertiesController = () => import ('#controllers/properties_controller')
 const PropertyImagesController = () => import ('#controllers/property_images_controller')
 const SocietiesController = () => import ('#controllers/societies_controller')
 const UsersController = () => import ('#controllers/users_controller')
+const UserAvatarsController = () => import ('#controllers/user_avatars_controller')
 
 
+import { sep, normalize } from 'node:path'
+import app from '@adonisjs/core/services/app'
 import router from '@adonisjs/core/services/router'
-import { middleware } from './kernel.js'
+import { middleware } from '#start/kernel'
 
 import AutoSwagger from "adonis-autoswagger";
 import swagger from "#config/swagger";
@@ -32,6 +35,21 @@ router.get("/docs", async () => {
   return AutoSwagger.default.ui("/swagger", swagger);
 })
 
+const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
+
+router.get('/uploads/*', ({ request, response }) => {
+  const filePath = request.param('*').join(sep)
+  const normalizedPath = normalize(filePath)
+  
+  if (PATH_TRAVERSAL_REGEX.test(normalizedPath)) {
+    return response.badRequest('Malformed path')
+  }
+
+  const absolutePath = app.makePath('uploads', normalizedPath)
+  return response.download(absolutePath)
+})
+
+
 router
   .group(() => {
     router.post('register', AuthenticationController.register)
@@ -44,6 +62,12 @@ router
   .resource('users', UsersController)
   .apiOnly()
   .use(['index', 'store', 'update', 'destroy'], middleware.auth())
+
+router
+  .resource('users.avatar', UserAvatarsController)
+  .apiOnly()
+  .except(['index', 'show', 'update'])
+  .use('*', middleware.auth())
 
 router
   .resource('societies', SocietiesController)
