@@ -11,6 +11,7 @@ import ProviderService from '#models/provider_service'
 import Society from '#models/society'
 import Review from '#models/review'
 import Message from '#models/message'
+import { UserStatus } from '#enums/user_status'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -40,6 +41,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
+  declare status: UserStatus
+
+  @column()
   declare isActive: boolean
 
   @column()
@@ -66,10 +70,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Message)
   declare messages: HasMany<typeof Message>
 
-  @column.dateTime({ autoCreate: true, serializeAs: null })
+  @column.dateTime({ autoCreate: true, })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null})
+  @column.dateTime({ autoCreate: true, autoUpdate: true, })
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {

@@ -7,8 +7,8 @@ export const createUserValidator = vine.compile(
     email: vine.string().email().maxLength(255),
     phoneNumber: vine.string().minLength(10).maxLength(15).optional(),
     password: vine.string().minLength(6),
-    isActive: vine.boolean(),
-    isAdmin: vine.boolean(),
+    isActive: vine.boolean().optional(),
+    isAdmin: vine.boolean().optional(),
     societyId: vine.number().positive().optional(),
   })
 )
@@ -30,7 +30,7 @@ export const updateUserAvatarValidator = vine.compile(
   vine.object({
     avatar: vine.file({
       size: '2mb',
-      extnames: ['jpg', 'png']
+      extnames: ['jpg', 'png', 'jpeg']
     })
   })
 )

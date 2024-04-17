@@ -12,6 +12,11 @@ export default class extends BaseSchema {
       table.string('email', 254).notNullable().unique()
       table.string('phoneNumber').nullable()
       table.string('password').notNullable()
+      table.enu('status', ['pending', 'active', 'blocked'], {
+        useNative: true,
+        enumName: 'user_status',
+        existingType: true,
+      }).defaultTo('pending').notNullable()
       table.boolean('isAdmin').defaultTo(false).notNullable()
       table.boolean('isActive').defaultTo(true).notNullable()
       table.integer('society_id').unsigned().references('societies.id')

@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.enu('type', ['apartment', 'home', 'room'], {
         useNative: true,
         enumName: 'property_type',
-        existingType: false,
+        existingType: true,
       })
       table.string('address').notNullable()
       table.string('country').notNullable()

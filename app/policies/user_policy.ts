@@ -3,11 +3,12 @@ import { BasePolicy, allowGuest } from '@adonisjs/bouncer'
 import { AuthorizerResponse } from '@adonisjs/bouncer/types'
 
 export default class UserPolicy extends BasePolicy {
-  async before(user: User | null) {
+  async before(user: User | null, action: string, ...params: any[]) {
     /**
      * Always allow an admin user without performing any check
      */
-    if (user && user.isAdmin) {
+
+    if (user && user?.$extras.isAdmin) {
       return true
     }
   }
@@ -22,6 +23,7 @@ export default class UserPolicy extends BasePolicy {
   }
 
   create() {
+    console.log('test');
     return false
   }
 
