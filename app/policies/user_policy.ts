@@ -23,7 +23,6 @@ export default class UserPolicy extends BasePolicy {
   }
 
   create() {
-    console.log('test');
     return false
   }
 

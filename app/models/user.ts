@@ -41,6 +41,24 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
+  declare country: string | null
+
+  @column()
+  declare state: string | null
+
+  @column()
+  declare city: string | null
+
+  @column()
+  declare zipCode: string | null
+
+  @column()
+  declare line1: string | null
+
+  @column()
+  declare line2: string | null
+
+  @column()
   declare status: UserStatus
 
   @column()

@@ -12,6 +12,12 @@ export default class extends BaseSchema {
       table.string('email', 254).notNullable().unique()
       table.string('phoneNumber').nullable()
       table.string('password').notNullable()
+      table.string('country').nullable()
+      table.string('state').nullable()
+      table.string('city').nullable()
+      table.string('zip_code').nullable()
+      table.string('line_1').nullable()
+      table.string('line_2').nullable()
       table.enu('status', ['pending', 'active', 'blocked'], {
         useNative: true,
         enumName: 'user_status',
