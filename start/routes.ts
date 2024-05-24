@@ -21,6 +21,7 @@ import { middleware } from '#start/kernel'
 
 import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
+import InvoicesController from '#controllers/invoices_controller'
 
 router.get('/', async () => {
   return 'Bienvenue sur notre projet annuel.'
@@ -79,5 +80,7 @@ router
   .apiOnly()
   .except(['index', 'show', 'update'])
   .use('*', middleware.auth())
+
+router.resource('invoices', InvoicesController).apiOnly().use('*', middleware.auth())
 
 export default router

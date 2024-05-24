@@ -8,8 +8,6 @@ export default class extends BaseSchema {
       table.increments('id').notNullable()
       table.float('amount').notNullable()
       table.integer('user_id').unsigned().references('users.id').nullable()
-      table.integer('society_id').unsigned().references('societies.id').nullable()
-      table.integer('issuer_user_id').unsigned().references('users.id').nullable()
       table.integer('issuer_society_id').unsigned().references('societies.id').nullable()
       table.timestamp('due_at').notNullable()
       table.timestamp('paid_at').nullable()

@@ -2,13 +2,12 @@ import { DateTime } from 'luxon'
 import { withAuthFinder } from '@adonisjs/auth'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Invoice from '#models/invoice'
 import Property from '#models/property'
 import ProviderService from '#models/provider_service'
-import Society from '#models/society'
 import Review from '#models/review'
 import Message from '#models/message'
 import { UserStatus } from '#enums/user_status'
@@ -66,12 +65,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare isAdmin: boolean
-
-  @column()
-  declare societyId: number
-
-  @belongsTo(() => Society)
-  declare society: BelongsTo<typeof Society>
 
   @hasMany(() => Property)
   declare property: HasMany<typeof Property>

@@ -1,67 +1,69 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations';
-import User from '#models/user';
-import PropertyImage from '#models/property_image';
-import OwnerPlanning from '#models/owner_planning';
-import ProviderPlanning from '#models/provider_planning';
-import Society from '#models/society';
-import { PropertyType } from '#enums/property_type';
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import User from '#models/user'
+import PropertyImage from '#models/property_image'
+import OwnerPlanning from '#models/owner_planning'
+import ProviderPlanning from '#models/provider_planning'
+import { PropertyType } from '#enums/property_type'
 
 export default class Property extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare type: PropertyType;
+  declare title: string
 
   @column()
-  declare name: string;
+  declare description: string
 
   @column()
-  declare address: string;
+  declare propertyType: PropertyType
 
   @column()
-  declare country: string;
+  declare country: string
 
   @column()
-  declare squareMetersNumber: number;
+  declare state: string
 
   @column()
-  declare roomNumber: number;
+  declare city: string
 
   @column()
-  declare description: string;
+  declare zipCode: string
 
   @column()
-  declare dayCost: number | null;
+  declare line1: string
 
   @column()
-  declare monthlyCost: number | null;
+  declare price: number
 
   @column()
-  declare isPublic: boolean;
+  declare bedrooms: number
+
+  @column()
+  declare bathrooms: number
+
+  @column()
+  declare beds: number
+
+  @column()
+  declare isPrivate: boolean
 
   @hasMany(() => PropertyImage)
-  declare propertyImages: HasMany<typeof PropertyImage>;
+  declare propertyImages: HasMany<typeof PropertyImage>
 
   @hasMany(() => OwnerPlanning)
-  declare ownerPlanning: HasMany<typeof OwnerPlanning>;
+  declare ownerPlanning: HasMany<typeof OwnerPlanning>
 
   @hasMany(() => ProviderPlanning)
-  declare providerPlanning: HasMany<typeof ProviderPlanning>;
+  declare providerPlanning: HasMany<typeof ProviderPlanning>
 
   @column()
-  declare userId: number;
+  declare userId: number
 
   @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>;
-
-  @column()
-  declare societyId: number;
-
-  @belongsTo(() => Society)
-  declare society: BelongsTo<typeof Society>
+  declare user: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

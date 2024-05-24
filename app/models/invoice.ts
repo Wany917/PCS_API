@@ -28,18 +28,6 @@ export default class Invoice extends BaseModel {
   declare user: BelongsTo<typeof User>;
 
   @column()
-  declare societyId: number;
-
-  @belongsTo(() => Society)
-  declare society: BelongsTo<typeof Society>;
-
-  @column()
-  declare issuerUserId: number;
-
-  @belongsTo(() => User)
-  declare issuerUser: BelongsTo<typeof User>;
-
-  @column()
   declare issuerSocietyId: number;
 
   @belongsTo(() => Society)

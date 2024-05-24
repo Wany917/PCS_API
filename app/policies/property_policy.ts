@@ -26,12 +26,10 @@ export default class PropertyPolicy extends BasePolicy {
    */
   create(
     user: User,
-    userPass: number | undefined,
-    societyPass: number | undefined
+    userPass: number | undefined
   ): AuthorizerResponse {
     return (
-      (user.id === userPass || userPass === undefined) &&
-      (user?.society?.id === societyPass || societyPass === undefined)
+      user.id === userPass || userPass === undefined
     )
   }
 

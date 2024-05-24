@@ -1,17 +1,13 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'users'
+  protected tableName = 'societies'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
-      table.string('firstname').notNullable()
-      table.string('lastname').notNullable()
-      table.string('avatar').nullable()
-      table.string('email', 254).notNullable().unique()
-      table.string('phoneNumber').nullable()
-      table.string('password').notNullable()
+      table.string('name').notNullable()
+      table.string('siren').notNullable()
       table.string('country').nullable()
       table.string('state').nullable()
       table.string('city').nullable()
@@ -20,13 +16,12 @@ export default class extends BaseSchema {
       table.string('line_2').nullable()
       table.enu('status', ['pending', 'active', 'blocked'], {
         useNative: true,
-        enumName: 'user_status',
+        enumName: 'society_status',
         existingType: true,
       }).defaultTo('pending').notNullable()
-      table.boolean('isAdmin').defaultTo(false).notNullable()
-      table.boolean('isActive').defaultTo(true).notNullable()
+      table.integer('user_id').unsigned().references('users.id').notNullable()
       table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('updated_at').notNullable()
     })
   }
 

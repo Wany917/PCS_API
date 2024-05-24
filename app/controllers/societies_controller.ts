@@ -2,7 +2,6 @@ import { HttpContext } from '@adonisjs/core/http'
 import Society from '#models/society'
 import SocietyPolicy from '#policies/society_policy'
 import { createSocietyValidator, updateSocietyValidator } from '#validators/society_validator'
-import User from '#models/user'
 
 export default class SocietiesController {
   async index({ request, response, bouncer }: HttpContext) {
@@ -24,13 +23,7 @@ export default class SocietiesController {
 
     if (payload.userId === undefined) payload.userId = auth.getUserOrFail().id
 
-    const society = await Society.create(payload)
-    const user = await User.findByOrFail('id', payload.userId)
-
-    user.societyId = society.id
-    user.save()
-
-    return 'society created';
+    return Society.create(payload)
   }
 
   async show({ params, response, bouncer }: HttpContext) {

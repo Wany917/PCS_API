@@ -2,18 +2,11 @@ import { HttpContext } from '@adonisjs/core/http'
 import Invoice from '#models/invoice'
 
 export default class InvoicesController {
-    async index({ response }: HttpContext) {
-        try {
-            const invoices = await Invoice.query()
-                .preload('user')
-                .preload('items')
-                .preload('society')
-                .preload('issuerUser')
-                .preload('issuerSociety')
-            return response.ok(invoices)
-        } catch (error) {
-            return response.status(500).send({ error: 'Internal server error' })
-        }
+    async index({ request, response }: HttpContext) {
+        const page = request.input('page', 1)
+        const limit = request.input('limit', 10)
+
+        return Invoice.query().preload('user').paginate(page, limit)
     }
 
     async show({ params, response }: HttpContext) {
@@ -21,8 +14,6 @@ export default class InvoicesController {
             const invoice = await Invoice.query()
                 .preload('user')
                 .preload('items')
-                .preload('society')
-                .preload('issuerUser')
                 .preload('issuerSociety')
                 .where('id', params.id)
                 .first()

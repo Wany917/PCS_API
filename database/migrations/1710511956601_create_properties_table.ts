@@ -1,33 +1,36 @@
+import { PropertyType } from '#enums/property_type'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
-export default class extends BaseSchema {
+export default class PropertySchema extends BaseSchema {
   protected tableName = 'properties'
 
-  async up() {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id').notNullable()
-      table.string('name').notNullable()
-      table.enu('type', ['apartment', 'home', 'room'], {
+      table.increments('id').primary()
+      table.string('title').notNullable()
+      table.string('description').notNullable()
+      table.enum('property_type', Object.values(PropertyType), {
         useNative: true,
         enumName: 'property_type',
         existingType: true,
-      })
-      table.string('address').notNullable()
+      }).notNullable()
       table.string('country').notNullable()
-      table.integer('square_meters_number').notNullable()
-      table.integer('room_number').notNullable()
-      table.string('description').notNullable()
-      table.float('day_cost').nullable()
-      table.float('monthly_cost').nullable()
-      table.boolean('is_public').notNullable()
-      table.integer('user_id').unsigned().references('users.id').nullable()
-      table.integer('society_id').unsigned().references('societies.id').nullable()
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').notNullable()
+      table.string('state').notNullable()
+      table.string('city').notNullable()
+      table.string('zip_code').notNullable()
+      table.string('line_1').notNullable()
+      table.decimal('price', 15, 2).notNullable() // Assurez-vous que cela corresponde à vos exigences de précision et d'échelle
+      table.integer('bedrooms').unsigned().notNullable()
+      table.integer('bathrooms').unsigned().notNullable()
+      table.integer('beds').unsigned().notNullable()
+      table.boolean('is_private').notNullable().defaultTo(false)
+      table.integer('user_id').unsigned().references('id').inTable('users')
+      table.timestamp('created_at', { useTz: true }).notNullable()
+      table.timestamp('updated_at', { useTz: true }).notNullable()
     })
   }
 
-  async down() {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
 }

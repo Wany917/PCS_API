@@ -7,7 +7,7 @@ export default class SocietyPolicy extends BasePolicy {
     /**
      * Always allow an admin user without performing any check
      */
-    if (user && user.isAdmin) {
+    if (user && user.$extras.isAdmin) {
       return true
     }
   }

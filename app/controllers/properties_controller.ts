@@ -1,7 +1,10 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Property from '#models/property'
-import { createPropertyValidator, updatePropertyValidator } from '#validators/property_validator'
+import { createPropertyImagesValidator, createPropertyValidator, updatePropertyValidator } from '#validators/property_validator'
 import PropertyPolicy from '#policies/property_policy'
+import { cuid } from '@adonisjs/core/helpers'
+import app from '@adonisjs/core/services/app'
+import PropertyImage from '#models/property_image'
 
 export default class PropertiesController {
   async index({ request, response, bouncer }: HttpContext) {
@@ -16,15 +19,25 @@ export default class PropertiesController {
 
   async store({ request, response, bouncer, auth }: HttpContext) {
     const payload = await request.validateUsing(createPropertyValidator)
+    const property = await Property.create(payload);
 
-    if (await bouncer.with(PropertyPolicy).denies('create', payload.userId, payload.societyId)) {
-      return response.forbidden('Cannot add property.')
+    const { images } = await request.validateUsing(createPropertyImagesValidator)
+
+    if (images) {
+      for (let image of images) {
+        const imageName = `${cuid()}.${image.extname}`
+        await image?.move(app.makePath('uploads/properties'), {
+          name: imageName
+        })
+
+        await PropertyImage.create({
+          link: imageName,
+          propertyId: property.id
+        });
+      }
     }
 
-    if (payload.userId === undefined) payload.userId = auth.user?.id
-    if (payload.societyId === undefined) payload.societyId = auth.user?.society?.id
-    if (payload.societyId !== undefined) payload.userId = undefined
-    return Property.create(payload)
+    return response.json(property);
   }
 
   async show({ params, response, bouncer }: HttpContext) {
