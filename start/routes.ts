@@ -90,28 +90,4 @@ router
   .only(['index', 'store', 'destroy'])
   .use(['store', 'destroy'], middleware.auth())
 
-router
-  .resource('facilities', FacilitiesController)
-  .apiOnly()
-  .only(['index', 'store', 'destroy'])
-  .use(['store', 'destroy'], middleware.auth())
-
-router
-  .resource('facilities', FacilitiesController)
-  .apiOnly()
-  .only(['index', 'store', 'destroy'])
-  .use(['store', 'destroy'], middleware.auth())
-
-router
-  .resource('facilities', FacilitiesController)
-  .apiOnly()
-  .only(['index', 'store', 'destroy'])
-  .use(['store', 'destroy'], middleware.auth())
-
-router
-  .resource('facilities', FacilitiesController)
-  .apiOnly()
-  .only(['index', 'store', 'destroy'])
-  .use(['store', 'destroy'], middleware.auth())
-
 export default router
