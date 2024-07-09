@@ -1,37 +1,37 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations';
-import User from '#models/user';
-import InvoiceItem from '#models/invoice_item';
-import Society from '#models/society';
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import User from '#models/user'
+import InvoiceItem from '#models/invoice_item'
+import Society from '#models/society'
 
 export default class Invoice extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare amount: number;
+  declare amount: number
 
   @column.dateTime()
-  declare dueDate: DateTime;
+  declare dueDate: DateTime
 
   @column.dateTime()
-  declare paidAt: DateTime;
+  declare paidAt: DateTime
 
   @hasMany(() => InvoiceItem)
-  declare items: HasMany<typeof InvoiceItem>;
+  declare items: HasMany<typeof InvoiceItem>
 
   @column()
-  declare userId: number;
+  declare userId: number
 
   @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>;
+  declare user: BelongsTo<typeof User>
 
   @column()
-  declare issuerSocietyId: number;
+  declare issuerSocietyId: number
 
   @belongsTo(() => Society)
-  declare issuerSociety: BelongsTo<typeof Society>;
+  declare issuerSociety: BelongsTo<typeof Society>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

@@ -1,47 +1,47 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations';
-import User from '#models/user';
-import Property from '#models/property';
-import ProviderService from '#models/provider_service';
-import Society from '#models/society';
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import User from '#models/user'
+import Property from '#models/property'
+import ProviderService from '#models/provider_service'
+import Society from '#models/society'
 
 export default class ProviderPlanning extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column.dateTime()
-  declare startAt: DateTime;
+  declare startAt: DateTime
 
   @column.dateTime()
-  declare endAt: DateTime;
+  declare endAt: DateTime
 
   @column()
-  declare isReserved: boolean;
+  declare isReserved: boolean
 
   @column()
-  declare propertyId: number;
+  declare propertyId: number
 
   @belongsTo(() => Property)
-  declare property: BelongsTo<typeof Property>;
+  declare property: BelongsTo<typeof Property>
 
   @column()
-  declare providerServiceId: number;
+  declare providerServiceId: number
 
   @belongsTo(() => ProviderService)
-  declare providerService: BelongsTo<typeof ProviderService>;
+  declare providerService: BelongsTo<typeof ProviderService>
 
   @column()
-  declare userId: number;
+  declare userId: number
 
   @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>;
+  declare user: BelongsTo<typeof User>
 
   @column()
-  declare societyId: number;
+  declare societyId: number
 
   @belongsTo(() => Society)
-  declare society: BelongsTo<typeof Society>;
+  declare society: BelongsTo<typeof Society>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

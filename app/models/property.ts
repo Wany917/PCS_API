@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import PropertyImage from '#models/property_image'
 import OwnerPlanning from '#models/owner_planning'
 import ProviderPlanning from '#models/provider_planning'
 import { PropertyType } from '#enums/property_type'
+import Facility from '#models/facility'
 
 export default class Property extends BaseModel {
   @column({ isPrimary: true })
@@ -58,6 +59,11 @@ export default class Property extends BaseModel {
 
   @hasMany(() => ProviderPlanning)
   declare providerPlanning: HasMany<typeof ProviderPlanning>
+
+  @manyToMany(() => Facility, {
+    pivotTable: 'property_facilities',
+  })
+  declare facilities: ManyToMany<typeof Facility>
 
   @column()
   declare userId: number

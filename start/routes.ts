@@ -14,6 +14,7 @@ const SocietiesController = () => import('#controllers/societies_controller')
 const UsersController = () => import('#controllers/users_controller')
 const UserAvatarsController = () => import('#controllers/user_avatars_controller')
 const InvoicesController = () => import('#controllers/invoices_controller')
+const FacilitiesController = () => import('#controllers/facilities_controller')
 
 import { sep, normalize } from 'node:path'
 import app from '@adonisjs/core/services/app'
@@ -82,5 +83,35 @@ router
   .use('*', middleware.auth())
 
 router.resource('invoices', InvoicesController).apiOnly().use('*', middleware.auth())
+
+router
+  .resource('facilities', FacilitiesController)
+  .apiOnly()
+  .only(['index', 'store', 'destroy'])
+  .use(['store', 'destroy'], middleware.auth())
+
+router
+  .resource('facilities', FacilitiesController)
+  .apiOnly()
+  .only(['index', 'store', 'destroy'])
+  .use(['store', 'destroy'], middleware.auth())
+
+router
+  .resource('facilities', FacilitiesController)
+  .apiOnly()
+  .only(['index', 'store', 'destroy'])
+  .use(['store', 'destroy'], middleware.auth())
+
+router
+  .resource('facilities', FacilitiesController)
+  .apiOnly()
+  .only(['index', 'store', 'destroy'])
+  .use(['store', 'destroy'], middleware.auth())
+
+router
+  .resource('facilities', FacilitiesController)
+  .apiOnly()
+  .only(['index', 'store', 'destroy'])
+  .use(['store', 'destroy'], middleware.auth())
 
 export default router

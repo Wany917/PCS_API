@@ -1,10 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Property from '#models/property'
-import {
-  createPropertyImagesValidator,
-  createPropertyValidator,
-  updatePropertyValidator,
-} from '#validators/property_validator'
+import { createPropertyFacilitiesValidator, createPropertyImagesValidator, createPropertyValidator, updatePropertyValidator } from '#validators/property_validator'
 import PropertyPolicy from '#policies/property_policy'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
@@ -18,14 +14,15 @@ export default class PropertiesController {
 
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
-    return Property.query().preload('propertyImages').paginate(page, limit)
+    return Property.query().preload('propertyImages').preload('facilities').paginate(page, limit)
   }
 
-  async store({ request, response, bouncer, auth }: HttpContext) {
+  async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createPropertyValidator)
     const property = await Property.create(payload)
 
     const { images } = await request.validateUsing(createPropertyImagesValidator)
+    const { facilities } = await request.validateUsing(createPropertyFacilitiesValidator)
 
     if (images) {
       for (let image of images) {
@@ -41,7 +38,12 @@ export default class PropertiesController {
       }
     }
 
-    return response.json(property)
+
+    if (facilities) {
+      await property.related('facilities').attach(facilities);
+    }
+
+    return response.json(property);
   }
 
   async show({ params, response, bouncer }: HttpContext) {

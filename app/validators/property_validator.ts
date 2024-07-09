@@ -1,30 +1,6 @@
 import vine from '@vinejs/vine'
 import { PropertyType } from '#enums/property_type'
 
-const amenitiesSchema = vine.object({
-  wifi: vine.boolean(),
-  kitchen: vine.boolean(),
-  washer: vine.boolean(),
-  dryer: vine.boolean(),
-  airConditioning: vine.boolean(),
-  heating: vine.boolean(),
-  television: vine.boolean(),
-  hairDryer: vine.boolean(),
-  iron: vine.boolean(),
-  pool: vine.boolean(),
-  jacuzzi: vine.boolean(),
-  freeParking: vine.boolean(),
-  evCharger: vine.boolean(),
-  crib: vine.boolean(),
-  kingBed: vine.boolean(),
-  gym: vine.boolean(),
-  barbecue: vine.boolean(),
-  breakfast: vine.boolean(),
-  fireplace: vine.boolean(),
-  smokeDetector: vine.boolean(),
-  coDetector: vine.boolean(),
-})
-
 export const createPropertyValidator = vine.compile(
   vine.object({
     title: vine.string().minLength(2).maxLength(255),
@@ -54,6 +30,12 @@ export const createPropertyImagesValidator = vine.compile(
         })
       )
       .optional(),
+  })
+)
+
+export const createPropertyFacilitiesValidator = vine.compile(
+  vine.object({
+    facilities: vine.array(vine.number().positive()),
   })
 )
 
