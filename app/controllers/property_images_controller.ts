@@ -1,12 +1,12 @@
 import { HttpContext } from '@adonisjs/core/http'
 import PropertyImage from '#models/property_image'
-import { createPropertyImageValidator } from '#validators/property_validator'
+import { createPropertyImagesValidator } from '#validators/property_validator'
 import PropertyImagePolicy from '#policies/property_image_policy'
 import Property from '#models/property'
 
 export default class PropertyImagesController {
   async store({ params, request, response, bouncer }: HttpContext) {
-    const payload = await request.validateUsing(createPropertyImageValidator)
+    const payload = await request.validateUsing(createPropertyImagesValidator)
     const property = await Property.findOrFail(params.property_id)
 
     if (await bouncer.with(PropertyImagePolicy).denies('create', property)) {

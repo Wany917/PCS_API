@@ -26,7 +26,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare lastname: string
-  
+
   @column()
   declare avatar: string | null
 
@@ -81,10 +81,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Message)
   declare messages: HasMany<typeof Message>
 
-  @column.dateTime({ autoCreate: true, })
+  @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true, })
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {

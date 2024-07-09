@@ -18,11 +18,14 @@ export default class extends BaseSchema {
       table.string('zip_code').nullable()
       table.string('line_1').nullable()
       table.string('line_2').nullable()
-      table.enu('status', ['pending', 'active', 'blocked'], {
-        useNative: true,
-        enumName: 'user_status',
-        existingType: true,
-      }).defaultTo('pending').notNullable()
+      table
+        .enum('status', ['pending', 'active', 'blocked'], {
+          useNative: true,
+          enumName: 'user_status',
+          existingType: true,
+        })
+        .defaultTo('pending')
+        .notNullable()
       table.boolean('isAdmin').defaultTo(false).notNullable()
       table.boolean('isActive').defaultTo(true).notNullable()
       table.timestamp('created_at').notNullable()

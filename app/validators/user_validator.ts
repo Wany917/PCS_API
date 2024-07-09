@@ -42,7 +42,7 @@ export const updateUserAvatarValidator = vine.compile(
   vine.object({
     avatar: vine.file({
       size: '2mb',
-      extnames: ['jpg', 'png', 'jpeg']
-    })
+      extnames: ['jpg', 'png', 'jpeg'],
+    }),
   })
 )

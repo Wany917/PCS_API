@@ -1,6 +1,10 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Property from '#models/property'
-import { createPropertyImagesValidator, createPropertyValidator, updatePropertyValidator } from '#validators/property_validator'
+import {
+  createPropertyImagesValidator,
+  createPropertyValidator,
+  updatePropertyValidator,
+} from '#validators/property_validator'
 import PropertyPolicy from '#policies/property_policy'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
@@ -19,7 +23,7 @@ export default class PropertiesController {
 
   async store({ request, response, bouncer, auth }: HttpContext) {
     const payload = await request.validateUsing(createPropertyValidator)
-    const property = await Property.create(payload);
+    const property = await Property.create(payload)
 
     const { images } = await request.validateUsing(createPropertyImagesValidator)
 
@@ -27,17 +31,17 @@ export default class PropertiesController {
       for (let image of images) {
         const imageName = `${cuid()}.${image.extname}`
         await image?.move(app.makePath('uploads/properties'), {
-          name: imageName
+          name: imageName,
         })
 
         await PropertyImage.create({
           link: imageName,
-          propertyId: property.id
-        });
+          propertyId: property.id,
+        })
       }
     }
 
-    return response.json(property);
+    return response.json(property)
   }
 
   async show({ params, response, bouncer }: HttpContext) {
