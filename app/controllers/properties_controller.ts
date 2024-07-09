@@ -19,7 +19,7 @@ export default class PropertiesController {
 
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createPropertyValidator)
-    const property = await Property.create(payload);
+    const property = await Property.create(payload)
 
     const { images } = await request.validateUsing(createPropertyImagesValidator)
     const { facilities } = await request.validateUsing(createPropertyFacilitiesValidator)
@@ -28,13 +28,13 @@ export default class PropertiesController {
       for (let image of images) {
         const imageName = `${cuid()}.${image.extname}`
         await image?.move(app.makePath('uploads/properties'), {
-          name: imageName
+          name: imageName,
         })
 
         await PropertyImage.create({
           link: imageName,
-          propertyId: property.id
-        });
+          propertyId: property.id,
+        })
       }
     }
 

@@ -38,11 +38,7 @@ export default class SocietiesController {
     const society = await Society.findOrFail(params.id)
     const payload = await request.validateUsing(updateSocietyValidator)
 
-    if (
-      await bouncer
-        .with(SocietyPolicy)
-        .denies('update')
-    ) {
+    if (await bouncer.with(SocietyPolicy).denies('update')) {
       return response.forbidden('Cannot update property.')
     }
 

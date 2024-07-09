@@ -4,16 +4,18 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 export default class PropertySchema extends BaseSchema {
   protected tableName = 'properties'
 
-  public async up() {
+  async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('title').notNullable()
       table.string('description').notNullable()
-      table.enum('property_type', Object.values(PropertyType), {
-        useNative: true,
-        enumName: 'property_type',
-        existingType: true,
-      }).notNullable()
+      table
+        .enum('property_type', Object.values(PropertyType), {
+          useNative: true,
+          enumName: 'property_type',
+          existingType: true,
+        })
+        .notNullable()
       table.string('country').notNullable()
       table.string('state').notNullable()
       table.string('city').notNullable()
@@ -30,7 +32,7 @@ export default class PropertySchema extends BaseSchema {
     })
   }
 
-  public async down() {
+  async down() {
     this.schema.dropTable(this.tableName)
   }
 }

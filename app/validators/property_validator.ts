@@ -22,12 +22,14 @@ export const createPropertyValidator = vine.compile(
 
 export const createPropertyImagesValidator = vine.compile(
   vine.object({
-    images: vine.array(
-      vine.file({
-        size: '2mb',
-        extnames: ['jpg', 'png', 'jpeg', 'webp'],
-      })
-    ).optional(),
+    images: vine
+      .array(
+        vine.file({
+          size: '2mb',
+          extnames: ['jpg', 'png', 'jpeg', 'webp'],
+        })
+      )
+      .optional(),
   })
 )
 
