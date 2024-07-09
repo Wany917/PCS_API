@@ -24,8 +24,6 @@ import { middleware } from '#start/kernel'
 import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
 
-const InvoicesController = () => import('#controllers/invoices_controller')
-
 router.get('/', async () => {
   return 'Bienvenue sur notre projet annuel.'
 })
