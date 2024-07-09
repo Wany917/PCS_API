@@ -13,6 +13,7 @@ const PropertyImagesController = () => import('#controllers/property_images_cont
 const SocietiesController = () => import('#controllers/societies_controller')
 const UsersController = () => import('#controllers/users_controller')
 const UserAvatarsController = () => import('#controllers/user_avatars_controller')
+const InvoicesController = () => import('#controllers/invoices_controller')
 
 import { sep, normalize } from 'node:path'
 import app from '@adonisjs/core/services/app'
@@ -21,8 +22,6 @@ import { middleware } from '#start/kernel'
 
 import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
-
-const InvoicesController = () => import('#controllers/invoices_controller')
 
 router.get('/', async () => {
   return 'Bienvenue sur notre projet annuel.'
