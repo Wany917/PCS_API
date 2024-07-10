@@ -15,11 +15,7 @@ export default class extends BaseSchema {
       table.string('line_1').nullable()
       table.string('line_2').nullable()
       table
-        .enu('status', ['pending', 'active', 'blocked'], {
-          useNative: true,
-          enumName: 'society_status',
-          existingType: true,
-        })
+        .enu('status', ['pending', 'active', 'blocked'])
         .defaultTo('pending')
         .notNullable()
       table.integer('user_id').unsigned().references('users.id').notNullable()

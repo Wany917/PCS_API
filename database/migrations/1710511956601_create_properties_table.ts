@@ -10,11 +10,7 @@ export default class PropertySchema extends BaseSchema {
       table.string('title').notNullable()
       table.string('description').notNullable()
       table
-        .enum('property_type', Object.values(PropertyType), {
-          useNative: true,
-          enumName: 'property_type',
-          existingType: true,
-        })
+        .enum('property_type', Object.values(PropertyType))
         .notNullable()
       table.string('country').notNullable()
       table.string('state').notNullable()

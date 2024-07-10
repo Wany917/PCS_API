@@ -19,11 +19,7 @@ export default class extends BaseSchema {
       table.string('line_1').nullable()
       table.string('line_2').nullable()
       table
-        .enum('status', ['pending', 'active', 'blocked'], {
-          useNative: true,
-          enumName: 'user_status',
-          existingType: true,
-        })
+        .enum('status', ['pending', 'active', 'blocked'])
         .defaultTo('pending')
         .notNullable()
       table.boolean('isAdmin').defaultTo(false).notNullable()
