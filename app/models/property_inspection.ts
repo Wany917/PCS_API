@@ -11,7 +11,7 @@ export default class PropertyInspection extends BaseModel {
   declare bookingId: number
 
   @column()
-  declare type: 'check-in' | 'check-out'
+  declare type: 'check-in' | 'check-out' | 'intervention'
 
   @column()
   declare isClean: boolean

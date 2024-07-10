@@ -15,6 +15,9 @@ const UsersController = () => import('#controllers/users_controller')
 const UserAvatarsController = () => import('#controllers/user_avatars_controller')
 const InvoicesController = () => import('#controllers/invoices_controller')
 const FacilitiesController = () => import('#controllers/facilities_controller')
+const PropertyAvailabilitiesController = () => import('#controllers/property_availabilities_controller')
+const PropertyBookingsController = () => import('#controllers/property_bookings_controller')
+const PropertyInspectionsController = () => import('#controllers/property_inspections_controller')
 
 import { sep, normalize } from 'node:path'
 import app from '@adonisjs/core/services/app'
@@ -82,6 +85,17 @@ router
   .except(['index', 'show', 'update'])
   .use('*', middleware.auth())
 
+router
+  .resource('properties.availabilities', PropertyAvailabilitiesController)
+  .apiOnly()
+  .only(['index', 'store', 'destroy'])
+  .use('*', middleware.auth())
+
+router
+  .resource('properties.bookings', PropertyBookingsController)
+  .apiOnly()
+  .use(['show', 'store', 'update', 'destroy'], middleware.auth())
+
 router.resource('invoices', InvoicesController).apiOnly().use('*', middleware.auth())
 
 router
@@ -89,5 +103,12 @@ router
   .apiOnly()
   .only(['index', 'store', 'destroy'])
   .use(['store', 'destroy'], middleware.auth())
+
+router
+  .resource('inspections', PropertyInspectionsController)
+  .apiOnly()
+  .use('*', middleware.auth())
+
+
 
 export default router

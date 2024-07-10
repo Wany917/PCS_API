@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
-import ProviderService from './provider_service.js'
 import User from './user.js'
 import { SocietyStatus } from '#enums/society_status'
 
@@ -41,9 +40,6 @@ export default class Society extends BaseModel {
 
   @hasOne(() => User)
   declare user: HasOne<typeof User>
-
-  @hasMany(() => ProviderService)
-  declare providerServices: HasMany<typeof ProviderService>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

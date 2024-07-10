@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('booking_id').unsigned().references('property_bookings.id').onDelete('CASCADE')
-      table.enum('type', ['check-in', 'check-out']).notNullable()
+      table.enum('type', ['check-in', 'check-out', 'intervention']).notNullable()
       table.boolean('is_clean').notNullable()
       table.boolean('is_facilites_ok').notNullable()
       table.boolean('is_electricals_ok').notNullable()

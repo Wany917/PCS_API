@@ -7,9 +7,6 @@ import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Invoice from '#models/invoice'
 import Property from '#models/property'
-import ProviderService from '#models/provider_service'
-import Review from '#models/review'
-import Message from '#models/message'
 import { UserStatus } from '#enums/user_status'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -69,17 +66,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Property)
   declare property: HasMany<typeof Property>
 
-  @hasMany(() => ProviderService)
-  declare providerServices: HasMany<typeof ProviderService>
-
   @hasMany(() => Invoice)
   declare invoices: HasMany<typeof Invoice>
-
-  @hasMany(() => Review)
-  declare reviews: HasMany<typeof Review>
-
-  @hasMany(() => Message)
-  declare messages: HasMany<typeof Message>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

@@ -39,6 +39,13 @@ export const createPropertyFacilitiesValidator = vine.compile(
   })
 )
 
+export const createPropertyAvailabilitiesValidator = vine.compile(
+  vine.object({
+    startDate: vine.date().transform((value) => new Date(value)),
+    endDate: vine.date().transform((value) => new Date(value)),
+  })
+)
+
 export const updatePropertyValidator = vine.compile(
   vine.object({
     type: vine.enum(Object.values(PropertyType)).optional(),
