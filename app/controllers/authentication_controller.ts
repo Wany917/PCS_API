@@ -27,6 +27,7 @@ export default class AuthenticationController {
         accessToken: token?.token,
       })
     } catch (error) {
+      console.error('Login error:', error) // Log d'erreur
       return response.status(401).send({ error: 'Login failed', details: error.messages })
     }
   }
