@@ -5,13 +5,14 @@ import { DateTime } from 'luxon'
 
 export default class PropertyAvailabilitiesController {
     public async index({ params, response}: HttpContext) {
-        const { propertyId } = params.property_id
+        const propertyId = params.property_id
         const availabilities = await PropertyAvailability.query().where('property_id', propertyId)
         return response.ok(availabilities)
     }
     
     public async store({ params, request, response }: HttpContext) {
-        const { propertyId } = params.property_id
+        const propertyId = params.property_id
+        console.log(propertyId)
         const payload = await request.validateUsing(createPropertyAvailabilitiesValidator)
     
         const overlappingAvailabilities = await PropertyAvailability.query()

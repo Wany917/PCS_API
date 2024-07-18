@@ -69,7 +69,8 @@ export default class PropertiesController {
       return response.forbidden('Cannot update property.')
     }
 
-    property.merge(payload)
+    await property.merge(payload)
+
     await property.save()
     return { message: 'Property updated successfully' }
   }

@@ -5,7 +5,7 @@ import { DateTime } from 'luxon'
 
 export default class PropertyBookingsController {
     public async index({ params, response }: HttpContext) {
-        const propertyId = params.propertyId
+        const propertyId = params.property_id
 
         // Étape 1 : Récupérer toutes les plages de disponibilité pour la propriété
         const availabilities = await PropertyAvailability.query()
@@ -40,8 +40,10 @@ export default class PropertyBookingsController {
         return response.ok(availableDates)
     }
 
-    public async store({ request, response }: HttpContext) {
-        const { propertyId, userId, startDate, endDate, ...otherDetails } = request.all()
+    public async store({ params, request, response }: HttpContext) {
+        const propertyId = params.property_id
+        const { userId, startDate, endDate, ...otherDetails } = request.all()
+        
       
           // Convertir les dates de chaîne en objets DateTime
           const start = DateTime.fromISO(startDate)
@@ -67,7 +69,10 @@ export default class PropertyBookingsController {
     }
 
     public async show({ params, response }: HttpContext) {
-        const booking = await PropertyBooking.find(params.id)
+        const booking = await PropertyBooking.query()
+          .where('id', params.id)
+          .preload('inspections')
+          .first()
         if (!booking) {
             return response.notFound({ message: 'Réservation non trouvée.' })
         }
