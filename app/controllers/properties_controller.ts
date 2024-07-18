@@ -53,6 +53,7 @@ export default class PropertiesController {
 
     const property = await Property.findOrFail(params.id)
     await property.load('propertyImages')
+    await property.load('facilities')
 
     return property
   }
