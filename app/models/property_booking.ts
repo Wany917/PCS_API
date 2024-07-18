@@ -4,10 +4,14 @@ import Property from '#models/property'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import PropertyInspection from '#models/property_inspection'
 import ServiceRequest from './service_request.js'
+import User from './user.js'
 
 export default class PropertyBooking extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
   @column()
   declare userId: number
