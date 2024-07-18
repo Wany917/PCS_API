@@ -3,6 +3,7 @@ import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import Property from '#models/property'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import PropertyInspection from '#models/property_inspection'
+import ServiceRequest from './service_request.js'
 
 export default class PropertyBooking extends BaseModel {
   @column({ isPrimary: true })
@@ -19,6 +20,9 @@ export default class PropertyBooking extends BaseModel {
 
   @hasMany(() => PropertyInspection)
   declare inspections: HasMany<typeof PropertyInspection>
+
+  @hasMany(() => ServiceRequest)
+  declare serviceRequests: HasMany<typeof ServiceRequest>
 
   @column()
   declare propertyName: string

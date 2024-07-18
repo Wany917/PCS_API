@@ -8,6 +8,7 @@ import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Invoice from '#models/invoice'
 import Property from '#models/property'
 import { UserStatus } from '#enums/user_status'
+import ServiceRequests from '#models/service_request'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -68,6 +69,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Invoice)
   declare invoices: HasMany<typeof Invoice>
+
+  @hasMany(() => ServiceRequests)
+  declare serviceRequests: HasMany<typeof ServiceRequests>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

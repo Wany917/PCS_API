@@ -19,6 +19,7 @@ const PropertyAvailabilitiesController = () =>
   import('#controllers/property_availabilities_controller')
 const PropertyBookingsController = () => import('#controllers/property_bookings_controller')
 const PropertyInspectionsController = () => import('#controllers/property_inspections_controller')
+const ServiceRequestsController = () => import('#controllers/service_requests_controller')
 
 import { sep, normalize } from 'node:path'
 import app from '@adonisjs/core/services/app'
@@ -106,5 +107,7 @@ router
   .use(['store', 'destroy'], middleware.auth())
 
 router.resource('inspections', PropertyInspectionsController).apiOnly().use('*', middleware.auth())
+
+router.resource('service_requests', ServiceRequestsController).apiOnly().use('*', middleware.auth())
 
 export default router
