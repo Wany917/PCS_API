@@ -14,10 +14,7 @@ export default class extends BaseSchema {
       table.string('zip_code').nullable()
       table.string('line_1').nullable()
       table.string('line_2').nullable()
-      table
-        .enu('status', ['pending', 'active', 'blocked'])
-        .defaultTo('pending')
-        .notNullable()
+      table.enum('status', ['pending', 'active', 'blocked']).defaultTo('pending').notNullable()
       table.integer('user_id').unsigned().references('users.id').notNullable()
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').notNullable()

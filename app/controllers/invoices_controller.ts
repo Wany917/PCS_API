@@ -1,30 +1,44 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Invoice from '#models/invoice'
+import { DateTime } from 'luxon'
+import User from '#models/user'
+import Society from '#models/society'
 
 export default class InvoicesController {
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
 
-    return Invoice.query().preload('user').paginate(page, limit)
+    return Invoice.query()
+      .preload('user')
+      .preload('issuerUser')
+      .preload('issuerSociety')
+      .paginate(page, limit)
   }
 
   async show({ params, response }: HttpContext) {
     try {
+      const invoiceId = Number(params.id)
+
+      if (Number.isNaN(invoiceId)) {
+        return response.badRequest({ error: 'Invalid invoice ID' })
+      }
+
       const invoice = await Invoice.query()
         .preload('user')
+        .preload('issuerUser')
         .preload('items')
         .preload('issuerSociety')
-        .where('id', params.id)
-        .first()
-
-      if (!invoice) {
-        return response.notFound({ error: 'Invoice not found' })
-      }
+        .where('id', invoiceId)
+        .firstOrFail()
 
       return response.ok(invoice)
     } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
+      console.error('Error in invoice show method:', error)
+      return response.internalServerError({
+        error: 'Internal server error',
+        message: error.message,
+      })
     }
   }
 
@@ -32,16 +46,47 @@ export default class InvoicesController {
     try {
       const data = request.only([
         'amount',
-        'description',
         'userId',
         'societyId',
         'issuerUserId',
         'issuerSocietyId',
+        'dueAt',
       ])
+
+      // Vérifiez que dueAt est présent et valide
+      if (!data.dueAt) {
+        return response.status(400).send({ error: 'dueAt is required' })
+      }
+      data.dueAt = DateTime.fromISO(data.dueAt)
+      if (!data.dueAt.isValid) {
+        return response.status(400).send({ error: 'Invalid dueAt format' })
+      }
+
+      // Vérifiez que l'utilisateur existe
+      const user = await User.find(data.userId)
+      if (!user) {
+        return response.status(400).send({ error: 'Invalid userId' })
+      }
+
+      // Vérifiez que la société émettrice existe
+      const issuerSociety = await Society.find(data.issuerSocietyId)
+      if (!issuerSociety) {
+        return response.status(400).send({ error: 'Invalid issuerSocietyId' })
+      }
+
+      // Vérifiez que l'utilisateur émetteur existe (si fourni)
+      if (data.issuerUserId) {
+        const issuerUser = await User.find(data.issuerUserId)
+        if (!issuerUser) {
+          return response.status(400).send({ error: 'Invalid issuerUserId' })
+        }
+      }
+
       const invoice = await Invoice.create(data)
       return response.created(invoice)
     } catch (error) {
-      return response.status(400).send({ error: 'Invalid data provided' })
+      console.error('Invoice creation error:', error)
+      return response.status(400).send({ error: 'Invalid data provided', details: error.message })
     }
   }
 
@@ -53,7 +98,6 @@ export default class InvoicesController {
       }
       const data = request.only([
         'amount',
-        'description',
         'userId',
         'societyId',
         'issuerUserId',
@@ -75,62 +119,6 @@ export default class InvoicesController {
       }
       await invoice.delete()
       return response.noContent()
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async pay({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Invoice paid successfully' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async send({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Invoice sent successfully' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async sendReminder({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Payment reminder sent successfully' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async generatePDF({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'PDF generated successfully' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async import({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Invoices imported successfully' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async export({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Invoices exported successfully' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async search({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Invoices search results' })
-    } catch (error) {
-      return response.status(500).send({ error: 'Internal server error' })
-    }
-  }
-  async stats({ response }: HttpContext) {
-    try {
-      return response.ok({ message: 'Invoice statistics' })
     } catch (error) {
       return response.status(500).send({ error: 'Internal server error' })
     }

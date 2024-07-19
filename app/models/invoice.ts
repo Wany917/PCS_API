@@ -13,7 +13,10 @@ export default class Invoice extends BaseModel {
   declare amount: number
 
   @column.dateTime()
-  declare dueDate: DateTime
+  declare dueAt: DateTime
+
+  @column()
+  declare societyId: number
 
   @column.dateTime()
   declare paidAt: DateTime
@@ -26,6 +29,12 @@ export default class Invoice extends BaseModel {
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
+
+  @column()
+  declare issuerUserId: number
+
+  @belongsTo(() => User, { foreignKey: 'issuerUserId' })
+  declare issuerUser: BelongsTo<typeof User>
 
   @column()
   declare issuerSocietyId: number

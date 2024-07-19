@@ -35,7 +35,7 @@ export default class TransactionsController {
 
   async store({ request, response }: HttpContext) {
     try {
-      const data = request.only(['amount', 'dueDate', 'paidAt', 'userId', 'societyId', 'invoiceId'])
+      const data = request.only(['amount', 'dueAt', 'paidAt', 'userId', 'societyId', 'invoiceId'])
       const transaction = await Transaction.create(data)
       return response.created(transaction)
     } catch (error) {
@@ -46,7 +46,7 @@ export default class TransactionsController {
   async update({ params, request, response }: HttpContext) {
     try {
       const transaction = await Transaction.findOrFail(params.id)
-      const data = request.only(['amount', 'dueDate', 'paidAt', 'userId', 'societyId', 'invoiceId'])
+      const data = request.only(['amount', 'dueAt', 'paidAt', 'userId', 'societyId', 'invoiceId'])
       transaction.merge(data)
       await transaction.save()
       return response.ok(transaction)
